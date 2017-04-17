@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class TransacaoDao {
@@ -20,7 +21,7 @@ public class TransacaoDao {
         MinhaConexao.getCabecalho();
     }
 
-    public static void gravarTransacoes(Schedule schedule) {
+    public static LinkedList<Operacao> gravarTransacoes(Schedule schedule) {
         Operacao operacao = null;
 
         Connection conn = minhaConexao.getConnection();
@@ -51,6 +52,7 @@ public class TransacaoDao {
             System.out.println("Erro ao encerrar conexo");
             e.printStackTrace();
         }
+        return schedule.getScheduleInList();
     }
 
     public static int pegarUltimoIndice() {

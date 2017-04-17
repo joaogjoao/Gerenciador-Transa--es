@@ -35,5 +35,12 @@ public class Schedule {
     public void setScheduleInList(LinkedList<Operacao> scheduleInList) {
         this.scheduleInList = scheduleInList;
     }
+    
+    public void addRetorno(LinkedList<Operacao> retorn){
+        
+        retorn.addAll(this.getScheduleInList());
+        this.scheduleInList = new LinkedList<Operacao>();
+        this.scheduleInList.addAll(retorn);
+    };
 
 }

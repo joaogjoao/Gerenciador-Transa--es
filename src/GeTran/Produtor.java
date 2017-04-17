@@ -1,10 +1,12 @@
 package GeTran;
 
+import Beans.Operacao;
 import Beans.Schedule;
 import GeTran.GerenciadorTransacao;
 import GeTran.GerenciadorTransacao;
 import DAO.TransacaoDao;
 import DAO.TransacaoDao;
+import java.util.LinkedList;
 
 public class Produtor extends Thread {
 
@@ -23,6 +25,7 @@ public class Produtor extends Thread {
 
     public void run() {
         int ultimoIndice = 0;
+        LinkedList<Operacao> retorno = new LinkedList<Operacao>();
         //System.out.println( "Criando transacoes e gravando no banco..." );
         try {
             do {
@@ -30,7 +33,9 @@ public class Produtor extends Thread {
                 gerenciador = new GerenciadorTransacao(numeroItens, numeroTransacoes,
                         numeroAcessos, ultimoIndice);
                 Schedule schedule = new Schedule(gerenciador.getListaTransacoes());
-                TransacaoDao.gravarTransacoes(schedule);
+                schedule.addRetorno(retorno);
+                retorno = new LinkedList<Operacao>();
+                retorno = TransacaoDao.gravarTransacoes(schedule);
                 //System.out.println( "ok" );
                 Thread.sleep(3 * 1000);
                 //System.out.println( "ok" );
