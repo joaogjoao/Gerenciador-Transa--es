@@ -21,16 +21,20 @@ public class TransacaoDao {
         MinhaConexao.getCabecalho();
     }
 
-    public static LinkedList<Operacao> gravarTransacoes(Schedule schedule) {
+    public static LinkedList<Operacao> gravarTransacoes(Schedule schedule , boolean ultimo) {
         Operacao operacao = null;
 
         Connection conn = minhaConexao.getConnection();
         String sql = "INSERT INTO schedule(indiceTransacao, operacao, itemDado, timestampj) VALUES (?, ?, ?, ?)";
+        
+        
         PreparedStatement stmt = null;
-        int randomico = new Random().nextInt(schedule.getScheduleInList().size());
+        
+        int randomico = (ultimo)? schedule.getScheduleInList().size() :new Random().nextInt(schedule.getScheduleInList().size());
         if (randomico < (schedule.getScheduleInList().size() / 2)) {
             randomico += (schedule.getScheduleInList().size() / 2);
         }
+        
         while ((!schedule.getScheduleInList().isEmpty()) && (randomico > 0)) {
             operacao = schedule.getScheduleInList().removeFirst();
             try {

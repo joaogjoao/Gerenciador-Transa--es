@@ -27,19 +27,23 @@ public class Produtor extends Thread {
         int ultimoIndice = 0;
         LinkedList<Operacao> retorno = new LinkedList<Operacao>();
         //System.out.println( "Criando transacoes e gravando no banco..." );
+        Schedule schedule;
+
         try {
             do {
                 ultimoIndice = TransacaoDao.pegarUltimoIndice();
                 gerenciador = new GerenciadorTransacao(numeroItens, numeroTransacoes,
                         numeroAcessos, ultimoIndice);
-                Schedule schedule = new Schedule(gerenciador.getListaTransacoes());
+                schedule = new Schedule(gerenciador.getListaTransacoes());
                 schedule.addRetorno(retorno);
                 retorno = new LinkedList<Operacao>();
-                retorno = TransacaoDao.gravarTransacoes(schedule);
+                retorno = TransacaoDao.gravarTransacoes(schedule, false);
                 //System.out.println( "ok" );
                 Thread.sleep(3 * 1000);
                 //System.out.println( "ok" );
             } while (flag);
+            schedule.setScheduleInList(retorno);
+            TransacaoDao.gravarTransacoes(schedule, true);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
